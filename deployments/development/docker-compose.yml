@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  amazon-dash-button:
+    build:
+      context: ../../build
+      dockerfile: Dockerfile
+    image: amazon-dash-button:1
+    container_name: amazon-dash-button
+    hostname: amazon-dash-button
+    network_mode: host
+    volumes:
+      - ../..:/app
+    restart: always
+    environment:
+      TZ: Asia/Tokyo
+      ENVIRONMENT: $ENVIRONMENT
+      SLACK_TOKEN: $SLACK_TOKEN
+    working_dir: /app/deployments/$ENVIRONMENT
+    command: >
+      sh -c "
+        chmod 660 amazon-dash.yml \
+        && chown root:root amazon-dash.yml \
+        && amazon-dash run --root-allowed \
+      "
