@@ -7,7 +7,7 @@ DOCKER_COMPOSE := docker-compose -f deployments/$(ENVIRONMENT)/docker-compose.ym
 # ==================================================
 # .TARGET: amazon-dash
 # ==================================================
-.PHONY: init init/wifi
+.PHONY: init info configure discovery run
 
 init: # initialize
 	printf "
