@@ -16,10 +16,8 @@ services:
       TZ: Asia/Tokyo
       ENVIRONMENT: $ENVIRONMENT
       SLACK_TOKEN: $SLACK_TOKEN
-    working_dir: /app/deployments/$ENVIRONMENT
-    command: >
-      sh -c "
-        chmod 660 amazon-dash.yml \
-        && chown root:root amazon-dash.yml \
-        && amazon-dash run --root-allowed \
-      "
+    command:
+      amazon-dash run
+        --ignore-perms
+        --root-allowed
+        --config ./deployments/$ENVIRONMENT/amazon-dash.yml
