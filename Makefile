@@ -7,9 +7,9 @@ DOCKER_COMPOSE := docker-compose -f deployments/$(ENVIRONMENT)/docker-compose.ym
 # ==================================================
 # .TARGET: amazon-dash
 # ==================================================
-.PHONY: init info configure discovery run
+.PHONY: amzn/init amzn/info amzn/configure amzn/discovery amzn/run
 
-init: # initialize
+amzn/init: # initialize
 	printf "
 		! Long press the dash button until LED light blinks in blue
 		! Connect to Wifi with SSID 'Amazon ConfigureMe'
@@ -19,14 +19,12 @@ init: # initialize
 	done
 	printf "\n! Requesting to configure Wi-Fi settings ... "
 	$(MAKE) configure >/dev/null 2>&1 && echo ✔ Success || echo ✘ Failure
-info: # view about device
+amzn/info: # view about device
 	curl -m 1 -fsSL --dump-header - 'http://$(DEFAULT_IP_ADDRESS)'
-configure: # set up a device's Wi-Fi network
+amzn/configure: # set up a device's Wi-Fi network
 	curl -m 1 -fsSL --dump-header - 'http://$(DEFAULT_IP_ADDRESS)?amzn_ssid=$(WIFI_SSID)&amzn_pw=$(WIFI_PASSWORD)'
-discovery: # discover device on network
-	$(DOCKER_COMPOSE) exec $(SERVICE) amazon-dash discovery --root-allowed
-run: # run server
-	$(DOCKER_COMPOSE) exec $(SERVICE) amazon-dash run --root-allowed
+amzn/discovery: # discover device on network
+	$(DOCKER_COMPOSE) run -it --rm $(SERVICE) amazon-dash discovery
 
 # ==================================================
 # .TARGET: docker
